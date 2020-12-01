@@ -1,6 +1,6 @@
 # Advent of Code 2020
 
-# Links
+## Links
 
 https://adventofcode.com/
 https://doc.rust-lang.org/stable/rust-by-example/
