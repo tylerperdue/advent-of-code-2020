@@ -6,8 +6,9 @@ Find two numbers in `src/expense_report.txt` that add up to 2020 and return thei
 
 Find three numbers in `src/expense_report.txt` that add up to 2020 and return their product.
 
+***
 
-#### Reflection
+### Reflection
 
 Rust is hard. The compiler is so complex. Sometimes helpful, offering suggestions. Somethings speaking an entirely different language. 
 
