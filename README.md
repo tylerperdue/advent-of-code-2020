@@ -5,7 +5,7 @@
 * https://adventofcode.com/
 * https://doc.rust-lang.org/stable/rust-by-example/
 
-## Inspiration
+## Motivation
 
 * https://www.youtube.com/watch?v=Gi1ZhotgcNg
 * https://www.youtube.com/watch?v=XPFMzskXZvY
