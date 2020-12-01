@@ -1,3 +1,7 @@
+## Day 1
+
+***
+
 ### Part 1
 
 Find two numbers in `src/expense_report.txt` that add up to 2020 and return their product. 
