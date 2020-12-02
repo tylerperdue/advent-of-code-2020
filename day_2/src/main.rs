@@ -15,19 +15,19 @@ impl Entry {
 
 #[derive(Debug)]
 struct Policy {
-	min: i32,
-	max: i32,
-	letter: String,
+	a: usize,
+	b: usize,
+	l: String,
 }
 
 impl Policy {
 	fn new(p0: String, p1: String) -> Result<Policy, Box<dyn Error>> {
-		let mm = p0.split('-').collect::<Vec<&str>>();
+		let ab = p0.split('-').collect::<Vec<&str>>();
 
 		Ok(Policy{
-			min: mm[0].parse::<i32>()?,
-			max: mm[1].parse::<i32>()?,
-			letter: p1.split(':').collect::<Vec<&str>>()[0].to_string(),
+			a: ab[0].parse::<usize>()?,
+			b: ab[1].parse::<usize>()?,
+			l: p1.split(':').collect::<Vec<&str>>()[0].to_string(),
 		})
 	}
 }
@@ -48,21 +48,36 @@ fn parse_passwords(s: String) -> Result<Vec<Entry>, Box<dyn Error>> {
 	Ok(v)
 }
 
-fn valid_passwords_count(v: Vec<Entry>) -> i32 {
-	let mut a = 0;
+fn valid_count_part_1(v: Vec<Entry>) -> i32 {
+	let mut ans = 0;
 
 	for e in v {
-		let c = e.1.split(&e.0.letter).count() as i32 - 1;
+		let c = e.1.split(&e.0.l).count() - 1;
 
-		if c >= e.0.min && c <= e.0.max {
-			a += 1
+		if c >= e.0.a && c <= e.0.b {
+			ans += 1
 		}
 	}
 
-	a
+	ans
+}
+
+fn valid_count_part_2(v: Vec<Entry>) -> Result<i32, Box<dyn Error>> {
+	let mut ans = 0;
+
+	for e in v {
+		let l = e.1.chars().nth(e.0.a - 1).unwrap().to_string();
+		let r = e.1.chars().nth(e.0.b - 1).unwrap().to_string();
+
+		if l != r && (l == e.0.l || r == e.0.l) {
+			ans += 1
+		}
+	}
+
+	Ok(ans)
 }
 
 fn main() {
-    let entries = get_passwords().and_then(|s: String| parse_passwords(s)).unwrap();
-    println!("part 1: {}", valid_passwords_count(entries))
+	println!("part 1: {}", valid_count_part_1(get_passwords().and_then(|s: String| parse_passwords(s)).unwrap()));
+	println!("part 2: {}", get_passwords().and_then(|s: String| parse_passwords(s)).and_then(|v: Vec<Entry>| valid_count_part_2(v)).unwrap());
 }
