@@ -18,11 +18,11 @@ fn parse_slopes(s: String) -> Vec<Vec<char>> {
 	slopes
 }
 
-fn get_tree_count(s: &Vec<Vec<char>>, x: usize, y: usize) -> i64 {
+fn get_tree_count(s: &Vec<Vec<char>>, xy: (usize, usize)) -> i64 {
 	let mut ans = 0;
 
-	let mut r = y;
-	let mut c = x;
+	let mut r = xy.1;
+	let mut c = xy.0;
 
 	while r < s.len() {
 		if c >= s[r].len() {
@@ -33,8 +33,8 @@ fn get_tree_count(s: &Vec<Vec<char>>, x: usize, y: usize) -> i64 {
 			ans += 1
 		}
 
-		r += y;
-		c += x
+		r += xy.1;
+		c += xy.0
 	}
 
 	ans
@@ -43,12 +43,8 @@ fn get_tree_count(s: &Vec<Vec<char>>, x: usize, y: usize) -> i64 {
 fn main() {
 	let slopes = get_slopes().and_then(|s: String| Ok(parse_slopes(s))).unwrap();
 
-	let part_1 = get_tree_count(&slopes, 3, 1);
-	let part_2 = get_tree_count(&slopes, 1, 1) * 
-		get_tree_count(&slopes, 3, 1) * 
-		get_tree_count(&slopes, 5, 1) * 
-		get_tree_count(&slopes, 7, 1) * 
-		get_tree_count(&slopes, 1, 2);
+	let part_1 = get_tree_count(&slopes, (3, 1));
+	let part_2 = vec!((1, 1), (3, 1), (5, 1), (7, 1), (1, 2)).into_iter().map(|xy| get_tree_count(&slopes, xy)).fold(1, |total, count| total * count);
 
 	println!("part 1: {} part 2: {}", part_1, part_2)
 }
