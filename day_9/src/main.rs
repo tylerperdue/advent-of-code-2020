@@ -1,5 +1,7 @@
 use std::collections::HashMap;
 
+static PREAMBLE_SIZE: usize = 25;
+
 fn main() {
     let nums: Vec<i64> = include_str!("xmas-cipher.txt")
     	.lines()
@@ -9,17 +11,18 @@ fn main() {
 
     let hashed_preambles: Vec<HashMap<i64, bool>> = nums.iter()
     	.enumerate()
-    	.filter(|&(i, _)| i >= 25)
+    	.filter(|&(i, _)| i >= PREAMBLE_SIZE)
     	.map(|(i, _)| (get_preamble(&nums, i)))
     	.map(|p| (hash(&p)))
     	.collect();
 
-    println!("{:#?}", part_1(&nums, &hashed_preambles))
-    
+    let cache = part_1(&nums, &hashed_preambles);
+
+	println!("part 1: {} part 2: {}", cache, part_2(&cache, &nums))
 }
 
 fn get_preamble(v: &Vec<i64>, i: usize) -> Vec<i64> {
-	v[i-25..i].to_vec()
+	v[i-PREAMBLE_SIZE..i].to_vec()
 }
 
 fn hash(v: &Vec<i64>) -> HashMap<i64, bool> {
@@ -33,8 +36,8 @@ fn hash(v: &Vec<i64>) -> HashMap<i64, bool> {
 }
 
 fn part_1(nums: &Vec<i64>, v: &Vec<HashMap<i64, bool>>) -> i64 {
-	for i in 25..nums.len() {
-		if !contains_a_sum(&v[i-25], &nums[i]) {
+	for i in PREAMBLE_SIZE..nums.len() {
+		if !contains_a_sum(&v[i-PREAMBLE_SIZE], &nums[i]) {
 			return nums[i]
 		}
 	}
@@ -52,4 +55,23 @@ fn contains_a_sum(m: &HashMap<i64, bool>, n: &i64) -> bool {
 	}
 
 	false
+}
+
+fn part_2(c: &i64, nums: &Vec<i64>) -> i64 {
+	for i in 0..nums.len() {
+		let mut v: Vec<i64> = Vec::new();
+		let mut s = 0;
+
+		for j in i+1..nums.len() {
+			if s == *c {
+				v.sort();
+				return v[0] + v[v.len() - 1]
+			}
+
+			s += nums[j];
+			v.push(nums[j])
+		}
+	}
+
+	0
 }
