@@ -22,7 +22,7 @@ fn main() {
     	.filter(|t| t.1 - t.0 == 3)
     	.count();
 
-    let mut cache: HashMap<i64, i64> = HashMap::new();
+    let mut cache: HashMap<i64, i64> = HashMap::new(); // crucial for performance, my god
 
     println!("part 1: {} part 2: {}", ones * threes, arrangements(&mut cache, &jolts));
 }
