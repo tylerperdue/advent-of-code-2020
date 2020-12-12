@@ -30,33 +30,9 @@ fn part_1(seats: &Vec<Vec<char>>) -> i32 {
 }
 
 fn adjacent_count(seats: &Vec<Vec<char>>, row: usize, col: usize, ch: &char) -> i32 {
-	count(&adjacent_seats(seats, row , col), ch)
-}
-
-fn count(seats: &Vec<char>, ch: &char) -> i32 {
-	seats.iter().filter(|seat| *seat == ch).count() as i32
-}
-
-fn adjacent_seats(seats: &Vec<Vec<char>>, row: usize, col: usize) -> Vec<char> {
-	if row == 0 && col == 0 {
-		vec![seats[row][col+1], seats[row+1][col+1], seats[row+1][col]]
-	} else if row == seats.len()-1 && col == seats[0].len()-1 {
-		vec![seats[row][col-1], seats[row-1][col-1], seats[row-1][col]]
-	} else if row == 0 && col != seats[0].len()-1 {
-		vec![seats[row][col+1], seats[row+1][col+1], seats[row+1][col], seats[row+1][col-1], seats[row][col-1]]
-	} else if row == 0 && col == seats[0].len()-1 {
-		vec![seats[row][col-1], seats[row+1][col-1], seats[row+1][col]]
-	} else if col == 0 && row != seats.len()-1 {
-		vec![seats[row][col+1], seats[row+1][col+1], seats[row+1][col], seats[row-1][col], seats[row-1][col+1]]
-	} else if col == 0 && row == seats.len()-1 {
-		vec![seats[row][col+1], seats[row-1][col+1], seats[row-1][col]]
-	} else if row == seats.len()-1 {
-		vec![seats[row-1][col], seats[row-1][col+1], seats[row][col+1], seats[row][col-1], seats[row-1][col-1]]
-	} else if col == seats[0].len()-1 {
-		vec![seats[row-1][col], seats[row+1][col], seats[row+1][col-1], seats[row][col-1], seats[row-1][col-1]]
-	} else {
-		vec![seats[row][col+1], seats[row+1][col+1],seats[row+1][col], seats[row+1][col-1], seats[row][col-1], seats[row-1][col-1], seats[row-1][col], seats[row-1][col+1]]
-	}
+	deltas(seats, row, col).iter()
+		.map(|x| seats[(row as i32+x.0) as usize][(col as i32+x.1) as usize])
+		.filter(|seat| *seat == *ch).count() as i32
 }
 
 fn equals(one: &Vec<Vec<char>>, two: &Vec<Vec<char>>) -> bool {
@@ -80,31 +56,7 @@ fn part_2(seats: &Vec<Vec<char>>) -> i32 {
 	occupied(seats)
 }
 
-fn seeable_seats_count(seats: &Vec<Vec<char>>, row: usize, col: usize, ch: &char) -> i32 {
-	if row == 0 && col == 0 {
-		vec!
-		[step(seats, row, col, 0, 1), step(seats, row, col, 1, 1), step(seats, row, col, )]
-	// } else if row == seats.len()-1 && col == seats[0].len()-1 {
-		
-	// } else if row == 0 && col != seats[0].len()-1 {
-		
-	// } else if row == 0 && col == seats[0].len()-1 {
-		
-	// } else if col == 0 && row != seats.len()-1 {
-		
-	// } else if col == 0 && row == seats.len()-1 {
-	// 	vec![seats[row][col+1], seats[row-1][col+1], seats[row-1][col]]
-	// } else if row == seats.len()-1 {
-	// 	vec![seats[row-1][col], seats[row-1][col+1], seats[row][col+1], seats[row][col-1], seats[row-1][col-1]]
-	// } else if col == seats[0].len()-1 {
-	// 	vec![seats[row-1][col], seats[row+1][col], seats[row+1][col-1], seats[row][col-1], seats[row-1][col-1]]
-	// } else {
-	} else {
-		vec![seats[row][col+1], seats[row+1][col+1],seats[row+1][col], seats[row+1][col-1], seats[row][col-1], seats[row-1][col-1], seats[row-1][col], seats[row-1][col+1]]
-	}
-}
-
-fn deltas(seats: &Vec<Vec<char>>, row: usize, col: usize) -> Vec<(usize, usize) {
+fn deltas(seats: &Vec<Vec<char>>, row: usize, col: usize) -> Vec<(i32, i32)> {
 	if row == 0 && col == 0 {
 		vec![(0, 1), (1, 1), (1, 0)]
 	} else if row == seats.len()-1 && col == seats[0].len()-1 {
@@ -118,17 +70,10 @@ fn deltas(seats: &Vec<Vec<char>>, row: usize, col: usize) -> Vec<(usize, usize) 
 	} else if col == 0 && row == seats.len()-1 {
 		vec![(0, 1), (-1, 1), (-1, 0)]
 	} else if row == seats.len()-1 {
-		vec![(-1, 0), (-1. 1), (0, 1), (0, -1), (-1, -1)]
+		vec![(-1, 0), (-1, 1), (0, 1), (0, -1), (-1, -1)]
 	} else if col == seats[0].len()-1 {
 		vec![(-1, 0), (1, 0), (1, -1), (0, -1), (-1, -1)]
 	} else {
-		vec![seats[row][col+1], seats[row+1][col+1],seats[row+1][col], seats[row+1][col-1], seats[row][col-1], seats[row-1][col-1], seats[row-1][col], seats[row-1][col+1]]
-	}
-}
-
-fn step(seats: &Vec<char>, row: usize, col: usize, x: usize, y: usize, ch: &char) -> bool {
-	match seats.iter().filter(|seat| *seat == ch).count() {
-		0 => false,
-		_ => true
+		vec![(0, 1), (1, 1), (1, 0), (1, -1), (0, -1), (-1, -1), (-1, 0), (-1, 1)]
 	}
 }
