@@ -146,22 +146,20 @@ impl GPS for ByWaypoint {
 		let x = self.way_point.0 - self.x;
 		let y = self.way_point.1 - self.y;
 
-		for _i in 0..degrees/90 {
-			match conversion {
-				90 => {
-					self.way_point.0 = y * -1;
-					self.way_point.1 = x
-				},
-				180 => {
-					self.way_point.0 = x * -1;
-					self.way_point.1 = y * -1
-				}
-				270 => {
-					self.way_point.0 = y;
-					self.way_point.1 = x * -1
-				},
-				_ => ()
+		match conversion {
+			90 => {
+				self.way_point.0 = y * -1;
+				self.way_point.1 = x
+			},
+			180 => {
+				self.way_point.0 = x * -1;
+				self.way_point.1 = y * -1
 			}
+			270 => {
+				self.way_point.0 = y;
+				self.way_point.1 = x * -1
+			},
+			_ => ()
 		}
 
 		self.way_point.0 += self.x;
